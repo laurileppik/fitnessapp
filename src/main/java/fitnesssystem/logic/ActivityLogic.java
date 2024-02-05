@@ -16,4 +16,7 @@ public class ActivityLogic {
         List<Activity> activities=dao.findActivities();
         return dao.findActivities();
     }
+    public String numberOfActivities() {
+        return dao.findActivities().size() + " Activities";
+    }
 }

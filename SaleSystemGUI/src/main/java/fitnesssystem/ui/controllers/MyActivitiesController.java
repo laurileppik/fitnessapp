@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -49,6 +50,8 @@ public class MyActivitiesController implements Initializable {
     private TableColumn<Activity, Double> distanceColumn;
     @FXML
     private TableColumn<Activity, Integer> elevationColumn;
+    @FXML
+    private Label noOfActivities;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,8 +61,9 @@ public class MyActivitiesController implements Initializable {
         timeColumn.setCellValueFactory(createTimeCellFactory());
         distanceColumn.setCellValueFactory(new PropertyValueFactory<>("distance"));
         elevationColumn.setCellValueFactory(new PropertyValueFactory<>("elevation"));
-
         findAllActivities();
+
+        noOfActivities.setText(activityLogic.numberOfActivities());
     }
 
     private Callback<TableColumn.CellDataFeatures<Activity, String>, ObservableValue<String>> createDateCellFactory() {
@@ -95,9 +99,5 @@ public class MyActivitiesController implements Initializable {
         List<Activity> activityList= activityLogic.getAllActivities();
         ObservableList<Activity> activities = FXCollections.observableArrayList(activityList);
         activitiesTableView.setItems(activities);
-        for (Activity activity: activities) {
-            System.out.println(activity.getDuration().getSeconds());
-            //activitiesTableView.set
-        }
     }
 }
