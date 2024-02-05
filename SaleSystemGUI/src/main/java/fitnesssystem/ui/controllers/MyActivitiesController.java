@@ -67,6 +67,11 @@ public class MyActivitiesController implements Initializable {
 
         noOfActivities.setText(activityLogic.numberOfActivities());
         populateListOfAllSports();
+
+        listOfAllSports.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
+            sportsFilterUsed(newValue);
+        });
     }
 
     private void populateListOfAllSports() {
@@ -103,17 +108,24 @@ public class MyActivitiesController implements Initializable {
             }
         };
     }
+    private void activityListToObservableList(List<Activity> activityList){
+        ObservableList<Activity> activities = FXCollections.observableArrayList(activityList);
+        activitiesTableView.setItems(activities);
+    }
 
     private void findAllActivities() {
         List<Activity> activityList= activityLogic.getAllActivities();
-        ObservableList<Activity> activities = FXCollections.observableArrayList(activityList);
-        activitiesTableView.setItems(activities);
+        activityListToObservableList(activityList);
     }
 
     @FXML
     private void searchButtonPressed() {
         List<Activity> activityList= activityLogic.getActivitiesContainingWord(workoutKeywords.getText());
-        ObservableList<Activity> activities = FXCollections.observableArrayList(activityList);
-        activitiesTableView.setItems(activities);
+        activityListToObservableList(activityList);
+    }
+
+    private void sportsFilterUsed(String newValue) {
+        List<Activity> activityList= activityLogic.getActivitiesWithSportsFilterUsed(newValue);
+        activityListToObservableList(activityList);
     }
 }

@@ -38,4 +38,13 @@ public class ActivityLogic {
         }
         return activitiesContainingWord;
     }
+
+    public List<Activity> getActivitiesWithSportsFilterUsed(String newValue) {
+        List<Activity> activitiesWithSportsFilterUsed=new ArrayList<>();
+        for (Activity activity:dao.findActivities()) {
+            if (activity.getSport().getName().equals(newValue))
+                activitiesWithSportsFilterUsed.add(activity);
+        }
+        return activitiesWithSportsFilterUsed;
+    }
 }
