@@ -37,4 +37,5 @@ public class InMemorySystemDAO implements SystemDAO {
     public List<Segment> findSegments() {
         return segmentList;
     }
+
 }

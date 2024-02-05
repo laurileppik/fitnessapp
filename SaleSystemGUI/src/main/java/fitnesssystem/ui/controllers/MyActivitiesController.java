@@ -1,7 +1,6 @@
 package fitnesssystem.ui.controllers;
 
 import fitnesssystem.dataobjects.Activity;
-import fitnesssystem.dataobjects.Sport;
 import fitnesssystem.logic.ActivityLogic;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -9,9 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -52,6 +48,12 @@ public class MyActivitiesController implements Initializable {
     private TableColumn<Activity, Integer> elevationColumn;
     @FXML
     private Label noOfActivities;
+    @FXML
+    private ComboBox<String> listOfAllSports;
+    @FXML
+    private Button searchByTitle;
+    @FXML
+    private TextField workoutKeywords;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -64,6 +66,13 @@ public class MyActivitiesController implements Initializable {
         findAllActivities();
 
         noOfActivities.setText(activityLogic.numberOfActivities());
+        populateListOfAllSports();
+    }
+
+    private void populateListOfAllSports() {
+        List<String> sportsNames = activityLogic.getAllSportsNames();
+        ObservableList<String> observableSports = FXCollections.observableArrayList(sportsNames);
+        listOfAllSports.setItems(observableSports);
     }
 
     private Callback<TableColumn.CellDataFeatures<Activity, String>, ObservableValue<String>> createDateCellFactory() {
@@ -97,6 +106,13 @@ public class MyActivitiesController implements Initializable {
 
     private void findAllActivities() {
         List<Activity> activityList= activityLogic.getAllActivities();
+        ObservableList<Activity> activities = FXCollections.observableArrayList(activityList);
+        activitiesTableView.setItems(activities);
+    }
+
+    @FXML
+    private void searchButtonPressed() {
+        List<Activity> activityList= activityLogic.getActivitiesContainingWord(workoutKeywords.getText());
         ObservableList<Activity> activities = FXCollections.observableArrayList(activityList);
         activitiesTableView.setItems(activities);
     }

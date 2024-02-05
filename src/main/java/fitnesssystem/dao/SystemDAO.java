@@ -8,4 +8,5 @@ import java.util.List;
 public interface SystemDAO {
     List<Activity> findActivities();
     List<Segment> findSegments();
+
 }
