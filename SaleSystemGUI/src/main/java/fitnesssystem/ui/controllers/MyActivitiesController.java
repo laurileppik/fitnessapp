@@ -64,12 +64,10 @@ public class MyActivitiesController implements Initializable {
         distanceColumn.setCellValueFactory(new PropertyValueFactory<>("distance"));
         elevationColumn.setCellValueFactory(new PropertyValueFactory<>("elevation"));
         findAllActivities();
-
         noOfActivities.setText(activityLogic.numberOfActivities());
         populateListOfAllSports();
 
         listOfAllSports.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue);
             sportsFilterUsed(newValue);
         });
     }
@@ -95,14 +93,7 @@ public class MyActivitiesController implements Initializable {
     private Callback<TableColumn.CellDataFeatures<Activity, String>, ObservableValue<String>> createTimeCellFactory() {
         return cellData -> {
             if (cellData.getValue().getDuration() != null) {
-                Duration duration = cellData.getValue().getDuration();
-                long seconds = duration.getSeconds();
-                long HH = seconds / 3600;
-                long MM = (seconds % 3600) / 60;
-                long SS = seconds % 60;
-                String timeInHHMMSS = String.format("%02d:%02d:%02d", HH, MM, SS);
-
-                return new SimpleStringProperty(timeInHHMMSS);
+                return new SimpleStringProperty(cellData.getValue().getNormalizedDuration());
             } else {
                 return new SimpleStringProperty("");
             }

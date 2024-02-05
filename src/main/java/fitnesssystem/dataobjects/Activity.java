@@ -11,8 +11,9 @@ public class Activity {
     private LocalDateTime startTime;
     private String title;
     private String description;
+    private Athlete athlete;
 
-    public Activity(Sport sport, double distance, Duration duration, int elevation, LocalDateTime startTime, String title, String description) {
+    public Activity(Sport sport, double distance, Duration duration, int elevation, LocalDateTime startTime, String title, String description,Athlete athlete) {
         this.sport = sport;
         this.distance = distance;
         this.duration = duration;
@@ -20,6 +21,14 @@ public class Activity {
         this.startTime = startTime;
         this.title = title;
         this.description = description;
+        this.athlete=athlete;
+    }
+    public String getNormalizedDuration(){
+        long seconds = duration.getSeconds();
+        long HH = seconds / 3600;
+        long MM = (seconds % 3600) / 60;
+        long SS = seconds % 60;
+        return String.format("%02d:%02d:%02d", HH, MM, SS);
     }
 
     public Sport getSport() {
@@ -76,6 +85,14 @@ public class Activity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Athlete getAthlete() {
+        return athlete;
+    }
+
+    public void setAthlete(Athlete athlete) {
+        this.athlete = athlete;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package fitnesssystem.dao;
 
 import fitnesssystem.dataobjects.Activity;
+import fitnesssystem.dataobjects.Athlete;
 import fitnesssystem.dataobjects.Segment;
 import fitnesssystem.dataobjects.Sport;
 
@@ -17,8 +18,8 @@ public class InMemorySystemDAO implements SystemDAO {
     public InMemorySystemDAO() {
         List<Activity> activities = new ArrayList<Activity>();
         List<Segment> segments = new ArrayList<Segment>();
-        activities.add(new Activity(new Sport("Run"), 10.45, Duration.ofHours(1).plusMinutes(30).plusSeconds(45), 15, LocalDateTime.now(), "Afternoon Run", "New PB"));
-        activities.add(new Activity(new Sport("Bike"), 40.21, Duration.ofHours(2).plusMinutes(12).plusSeconds(30), 125, LocalDateTime.now(), "Afternoon Bike", "Awful wind today"));
+        activities.add(new Activity(new Sport("Run"), 10.45, Duration.ofHours(1).plusMinutes(30).plusSeconds(45), 15, LocalDateTime.now(), "Afternoon Run", "New PB",new Athlete("Peeter","Peets","Estonia","Tartu")));
+        activities.add(new Activity(new Sport("Bike"), 40.21, Duration.ofHours(2).plusMinutes(12).plusSeconds(30), 125, LocalDateTime.now(), "Afternoon Bike", "Awful wind today",new Athlete("Mike","John","England","London")));
         String timeString = "01:00:00";
         LocalTime timeToBeat = LocalTime.parse(timeString);
         String timeBestString = "01:05:00";

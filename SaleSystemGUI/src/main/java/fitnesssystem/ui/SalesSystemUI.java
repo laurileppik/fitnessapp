@@ -41,7 +41,7 @@ public class SalesSystemUI extends Application {
         Tab dashboardTab = new Tab();
         dashboardTab.setText("Dashboard");
         dashboardTab.setClosable(false);
-        dashboardTab.setContent(loadControls("DashboardTab.fxml", new DashboardController()));
+        dashboardTab.setContent(loadControls("DashboardTab.fxml", new DashboardController(new ActivityLogic(systemDAO))));
 
         Tab myActivitiesTab = new Tab();
         myActivitiesTab.setText("My activities");
