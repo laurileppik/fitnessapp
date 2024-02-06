@@ -2,6 +2,9 @@ package fitnesssystem.dataobjects;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 public class Activity {
     private Sport sport;
@@ -12,8 +15,11 @@ public class Activity {
     private String title;
     private String description;
     private Athlete athlete;
+    private String location;
 
-    public Activity(Sport sport, double distance, Duration duration, int elevation, LocalDateTime startTime, String title, String description,Athlete athlete) {
+
+
+    public Activity(Sport sport, double distance, Duration duration, int elevation, LocalDateTime startTime, String title, String description, Athlete athlete, String location) {
         this.sport = sport;
         this.distance = distance;
         this.duration = duration;
@@ -22,6 +28,7 @@ public class Activity {
         this.title = title;
         this.description = description;
         this.athlete=athlete;
+        this.location=location;
     }
     public String getNormalizedDuration(){
         long seconds = duration.getSeconds();
@@ -29,6 +36,11 @@ public class Activity {
         long MM = (seconds % 3600) / 60;
         long SS = seconds % 60;
         return String.format("%02d:%02d:%02d", HH, MM, SS);
+    }
+
+    public String getDateAndLocationOfActivity() {
+
+        return startTime.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))+" at " +startTime.format(DateTimeFormatter.ofPattern("HH:mm"))+ " * " + location;
     }
 
     public Sport getSport() {
@@ -93,6 +105,13 @@ public class Activity {
 
     public void setAthlete(Athlete athlete) {
         this.athlete = athlete;
+    }
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override

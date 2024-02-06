@@ -47,4 +47,6 @@ public class ActivityLogic {
         }
         return activitiesWithSportsFilterUsed;
     }
+
+
 }

@@ -4,26 +4,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <VBox fx:id="activitiesContainer" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-               <children>
-                  <BorderPane prefHeight="300.0" prefWidth="200.0">
-                     <top>
-                        <VBox fx:id="nameField" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                     </top>
-                     <center>
-                        <VBox fx:id="activityField" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                     </center>
-                     <bottom>
-                        <VBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                     </bottom>
-                  </BorderPane>
-               </children>
-            </VBox>
+            <VBox fx:id="activitiesContainer" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
          </center>
          <left>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />

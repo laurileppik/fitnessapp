@@ -7,7 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,13 +38,22 @@ public class DashboardController implements Initializable {
     private void displayActivities(List<Activity> activities) {
         for (Activity activity : activities) {
             Label nameLabel=new Label(activity.getAthlete().getFirstName() + " " + activity.getAthlete().getLastName());
+            Label dateAndLocationLabel=new Label(activity.getDateAndLocationOfActivity());
+            Label titleLabel=new Label(activity.getTitle());
             Label distanceLabel = new Label("Distance: " + activity.getDistance() + " km");
             Label timeLabel = new Label("Time: " + activity.getNormalizedDuration());
             Label emptyRow=new Label();
 
-            activitiesContainer.getChildren().addAll(nameLabel,distanceLabel, timeLabel,emptyRow);
-            //nameField.getChildren().addAll(nameLabel);
-            //activityField.getChildren().addAll(distanceLabel, timeLabel);
+            styleActivityLabels(nameLabel,titleLabel);
+
+            activitiesContainer.getChildren().addAll(nameLabel,dateAndLocationLabel,titleLabel,distanceLabel, timeLabel,emptyRow);
         }
     }
+
+    private void styleActivityLabels(Label nameLabel,Label titleLabel) {
+        nameLabel.setFont(Font.font(13));
+        titleLabel.setFont(Font.font("", FontWeight.BOLD,16));
+    }
+
+
 }
