@@ -1,8 +1,8 @@
 
 .root{
-	 b_color: #FF9C5F;
+	 b_color: #ffffff;
 	 sb_color: #558188;
-	 main_text_color: #FFEBCD;
+	 main_text_color: #000000;
 	 control_color: #5FA292;
 	 title_color: #253939;
 	 -fx-background-color: linear-gradient(from 25% 100% to 100% 25%, b_color, main_text_color);
