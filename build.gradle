@@ -6,3 +6,19 @@ java {
 }
 
 version = '1.0'
+
+repositories {
+    mavenCentral()
+    google()
+    flatDir {
+        dirs 'lib'
+    }
+    flatDir {
+        dirs 'lib1', 'lib2'
+    }
+}
+
+dependencies {
+    // Other dependencies...
+    implementation 'me.himanshusoni.gpxparser:gpx-parser:1.13'
+}

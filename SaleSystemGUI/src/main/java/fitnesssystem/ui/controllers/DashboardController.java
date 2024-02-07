@@ -1,5 +1,11 @@
 package fitnesssystem.ui.controllers;
 
+import com.sothawo.mapjfx.Coordinate;
+import com.sothawo.mapjfx.MapLabel;
+import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.event.MarkerEvent;
+
+
 import fitnesssystem.dataobjects.Activity;
 import fitnesssystem.logic.ActivityLogic;
 import javafx.fxml.FXML;
@@ -14,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -62,12 +69,28 @@ public class DashboardController implements Initializable {
                 elevationOrPaceLabel.setText(paceFormatted);
             }
 
+            MapView mapView = new MapView();
+            mapView.initialize();
+            mapView.setCenter(new Coordinate(58.38, 26.73));
+            mapView.setZoom(10);
+            mapView.setPrefSize(400, 200);
+
+
             styleActivityLabels(nameLabel,titleLabel);
+
 
             HBox metricsTitlesBox = createHBox(distanceTitleLabel, timeTitleLabel, elevationOrPaceLabelTitle);
             HBox metricsBox = createHBox(distanceLabel, timeLabel, elevationOrPaceLabel);
 
-            activitiesContainer.getChildren().addAll(nameLabel,dateAndLocationLabel,titleLabel,metricsTitlesBox,metricsBox,emptyRow);
+            VBox activityBox = new VBox(nameLabel, dateAndLocationLabel, titleLabel, metricsTitlesBox, metricsBox, emptyRow, mapView);
+            activityBox.setStyle("-fx-background-color: lightgrey;");
+            activityBox.setOnMouseClicked(event -> {
+                System.out.println("Activity " + activity.getTitle() + " clicked");
+
+            });
+
+            activitiesContainer.getChildren().add(activityBox);
+            //activitiesContainer.prefWidthProperty().bind(activitiesContainer.getScene().widthProperty().multiply(0.75));
         }
     }
 
