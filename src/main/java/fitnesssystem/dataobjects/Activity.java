@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-
 public class Activity {
     private Sport sport;
     private double distance;
@@ -16,10 +14,10 @@ public class Activity {
     private String description;
     private Athlete athlete;
     private String location;
+    private ActivityTrack activityTrack;
 
 
-
-    public Activity(Sport sport, double distance, Duration duration, int elevation, LocalDateTime startTime, String title, String description, Athlete athlete, String location) {
+    public Activity(Sport sport, double distance, Duration duration, int elevation, LocalDateTime startTime, String title, String description, Athlete athlete, String location, ActivityTrack activityTrack) {
         this.sport = sport;
         this.distance = distance;
         this.duration = duration;
@@ -29,6 +27,7 @@ public class Activity {
         this.description = description;
         this.athlete=athlete;
         this.location=location;
+        this.activityTrack = activityTrack;
     }
     public String getNormalizedDuration(){
         long seconds = duration.getSeconds();
@@ -41,6 +40,14 @@ public class Activity {
     public String getDateAndLocationOfActivity() {
 
         return startTime.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))+" at " +startTime.format(DateTimeFormatter.ofPattern("HH:mm"))+ " * " + location;
+    }
+
+    public ActivityTrack getActivityTrack() {
+        return activityTrack;
+    }
+
+    public void setActivityTrack(ActivityTrack activityTrack) {
+        this.activityTrack = activityTrack;
     }
 
     public Sport getSport() {

@@ -2,12 +2,18 @@ package fitnesssystem.logic;
 
 import fitnesssystem.dao.SystemDAO;
 import fitnesssystem.dataobjects.Activity;
-import fitnesssystem.dataobjects.Sport;
+import org.alternativevision.gpx.beans.GPX;
+import org.alternativevision.gpx.beans.Track;
+import org.alternativevision.gpx.beans.Waypoint;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ActivityLogic {
+    private static final Logger log = LogManager.getLogger(ActivityLogic.class);
     private final SystemDAO dao;
 
     public ActivityLogic(SystemDAO dao) {
@@ -48,5 +54,24 @@ public class ActivityLogic {
         return activitiesWithSportsFilterUsed;
     }
 
+    public ArrayList<Waypoint> getActivityTrackPoints() {
+        List<Activity> activities=dao.findActivities();
+        for (Activity activity :activities) {
+            GPX gpx= activity.getActivityTrack().getGpx();
+            HashSet<Track> tracks = gpx.getTracks();
+            if (tracks == null) {
+                log.info("No routes found");
+            } else if (tracks.isEmpty()) {
+                log.info("Routes list is empty.");
+            } else {
+                log.info("Routes: ");
+                for (Track track : tracks) {
+                    System.out.println(track.getTrackPoints());
+                    return track.getTrackPoints();
+                }
+            }
+        }
+        return null;
+    }
 
 }

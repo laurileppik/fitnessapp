@@ -1,31 +1,25 @@
 package fitnesssystem.ui.controllers;
 
 import com.sothawo.mapjfx.Coordinate;
-import com.sothawo.mapjfx.MapLabel;
 import com.sothawo.mapjfx.MapView;
-import com.sothawo.mapjfx.event.MarkerEvent;
 
 
 import fitnesssystem.dataobjects.Activity;
 import fitnesssystem.logic.ActivityLogic;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.alternativevision.gpx.beans.Waypoint;
 
-import java.awt.*;
-import java.io.IOException;
 import java.net.URL;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
     private final ActivityLogic activityLogic;
@@ -55,29 +49,12 @@ public class DashboardController implements Initializable {
             Label elevationOrPaceLabelTitle=new Label();
             Label distanceLabel = new Label(activity.getDistance() + " km");
             Label timeLabel = new Label(activity.getNormalizedDuration());
-            Label elevationOrPaceLabel=new Label();
             Label emptyRow=new Label();
-            if (Objects.equals(activity.getSport().getName(), "Bike")) {
-                elevationOrPaceLabelTitle.setText("Elevation");
-                elevationOrPaceLabel.setText(String.valueOf(activity.getElevation()) + " m");
-            } else {
-                elevationOrPaceLabelTitle.setText("Pace");
-                double paceInSecondsPerKm = activity.getDuration().getSeconds() / activity.getDistance();
-                int paceMinutes = (int) paceInSecondsPerKm / 60;
-                int paceSeconds = (int) paceInSecondsPerKm % 60;
-                String paceFormatted = String.format("%d:%02d /km", paceMinutes, paceSeconds);
-                elevationOrPaceLabel.setText(paceFormatted);
-            }
+            Label elevationOrPaceLabel = initalizeElevationOrPaceLabel(activity, elevationOrPaceLabelTitle);
 
-            MapView mapView = new MapView();
-            mapView.initialize();
-            mapView.setCenter(new Coordinate(58.38, 26.73));
-            mapView.setZoom(10);
-            mapView.setPrefSize(400, 200);
-
+            MapView mapView = initalizeMapView();
 
             styleActivityLabels(nameLabel,titleLabel);
-
 
             HBox metricsTitlesBox = createHBox(distanceTitleLabel, timeTitleLabel, elevationOrPaceLabelTitle);
             HBox metricsBox = createHBox(distanceLabel, timeLabel, elevationOrPaceLabel);
@@ -92,6 +69,33 @@ public class DashboardController implements Initializable {
             activitiesContainer.getChildren().add(activityBox);
             //activitiesContainer.prefWidthProperty().bind(activitiesContainer.getScene().widthProperty().multiply(0.75));
         }
+    }
+
+    private static Label initalizeElevationOrPaceLabel(Activity activity, Label elevationOrPaceLabelTitle) {
+        Label elevationOrPaceLabel=new Label();
+        if (Objects.equals(activity.getSport().getName(), "Bike")) {
+            elevationOrPaceLabelTitle.setText("Elevation");
+            elevationOrPaceLabel.setText(String.valueOf(activity.getElevation()) + " m");
+        } else {
+            elevationOrPaceLabelTitle.setText("Pace");
+            double paceInSecondsPerKm = activity.getDuration().getSeconds() / activity.getDistance();
+            int paceMinutes = (int) paceInSecondsPerKm / 60;
+            int paceSeconds = (int) paceInSecondsPerKm % 60;
+            String paceFormatted = String.format("%d:%02d /km", paceMinutes, paceSeconds);
+            elevationOrPaceLabel.setText(paceFormatted);
+        }
+        return elevationOrPaceLabel;
+    }
+
+    private MapView initalizeMapView() {
+        MapView mapView = new MapView();
+        mapView.initialize();
+        mapView.setCenter(new Coordinate(58.38, 26.73));
+        mapView.setZoom(10);
+        mapView.setPrefSize(400, 200);
+        ArrayList<Waypoint> trackCoordinates=activityLogic.getActivityTrackPoints();
+        System.out.println(trackCoordinates);
+        return mapView;
     }
 
     private HBox createHBox(Label... labels) {
