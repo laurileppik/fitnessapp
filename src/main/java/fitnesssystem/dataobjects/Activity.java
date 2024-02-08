@@ -39,7 +39,7 @@ public class Activity {
 
     public String getDateAndLocationOfActivity() {
 
-        return startTime.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))+" at " +startTime.format(DateTimeFormatter.ofPattern("HH:mm"))+ " * " + location;
+        return startTime.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))+" at " +startTime.format(DateTimeFormatter.ofPattern("HH:mm"))+ " * " ;
     }
 
     public ActivityTrack getActivityTrack() {

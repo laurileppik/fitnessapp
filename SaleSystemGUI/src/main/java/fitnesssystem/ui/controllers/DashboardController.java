@@ -16,20 +16,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.alternativevision.gpx.beans.Waypoint;
+import uk.recurse.geocoding.reverse.ReverseGeocoder;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DashboardController implements Initializable {
 
     private static final Coordinate coordinateTartu = new Coordinate(58.378025, 26.728493);
+    private int currentActivityCounter;
     private final ActivityLogic activityLogic;
     private final List<Marker> markerList;
     private final List<MapView> mapViewList;
@@ -43,13 +40,14 @@ public class DashboardController implements Initializable {
 
     public DashboardController(ActivityLogic activityLogic) {
         this.activityLogic = activityLogic;
+        currentActivityCounter = 0;
 
-        markerList=new ArrayList<>();
+        markerList = new ArrayList<>();
 
-        trackDrawingList=new ArrayList<>();
-        ArrayList<Coordinate> coordinatesForCoordinateLine=new ArrayList<>();
-        mapViewList=new ArrayList<>();
-        for (Activity activity :activityLogic.getAllActivities()) {
+        trackDrawingList = new ArrayList<>();
+        ArrayList<Coordinate> coordinatesForCoordinateLine = new ArrayList<>();
+        mapViewList = new ArrayList<>();
+        for (Activity activity : activityLogic.getAllActivities()) {
             mapViewList.add(new MapView());
             ArrayList<Waypoint> trackCoordinates = activityLogic.getActivityTrackPoints(activity);
             System.out.println(trackCoordinates);
@@ -57,7 +55,7 @@ public class DashboardController implements Initializable {
                 double latitude = waypoint.getLatitude();
                 double longitude = waypoint.getLongitude();
 
-                coordinatesForCoordinateLine.add(new Coordinate(latitude,longitude));
+                coordinatesForCoordinateLine.add(new Coordinate(latitude, longitude));
 
                 Marker marker = Marker.createProvided(Marker.Provided.RED);
                 marker.setPosition(new Coordinate(latitude, longitude));
@@ -65,16 +63,13 @@ public class DashboardController implements Initializable {
                 markerList.add(marker);
             }
 
-            CoordinateLine coordinateLine=new CoordinateLine(coordinatesForCoordinateLine).setColor(Color.MAGENTA).setVisible(true);
-            System.out.println("bef " + coordinatesForCoordinateLine);
+            CoordinateLine coordinateLine = new CoordinateLine(coordinatesForCoordinateLine).setColor(Color.MAGENTA).setVisible(true);
             trackDrawingList.add(coordinateLine);
             coordinatesForCoordinateLine.clear();
-            System.out.println("agt " + coordinatesForCoordinateLine);
         }
         System.out.println(trackDrawingList.size());
 
     }
-
 
 
     @Override
@@ -83,20 +78,18 @@ public class DashboardController implements Initializable {
     }
 
     private void displayActivities(List<Activity> activities) {
-        int mapViewListCounter=0;
+        int mapViewListCounter = 0;
         for (Activity activity : activities) {
             Label nameLabel = new Label(activity.getAthlete().getFirstName() + " " + activity.getAthlete().getLastName());
-            Label dateAndLocationLabel = new Label(activity.getDateAndLocationOfActivity());
-            Label titleLabel = new Label(activity.getTitle());
+            Label dateAndLocationLabel = new Label(activityLogic.getRealStartTime(activity) + getActivityLocation(activity));
+            Label titleLabel = new Label(activityLogic.getRealTitle(activity));
             Label distanceTitleLabel = new Label("Distance ");
             Label timeTitleLabel = new Label("Time ");
             Label elevationOrPaceLabelTitle = new Label();
             Label distanceLabel = new Label(activity.getDistance() + " km");
-            Label timeLabel = new Label(activity.getNormalizedDuration());
+            Label timeLabel = new Label(activityLogic.getRealDuration(activity));
             Label emptyRow = new Label();
             Label elevationOrPaceLabel = initalizeElevationOrPaceLabel(activity, elevationOrPaceLabelTitle);
-
-            System.out.println(mapViewList.get(mapViewListCounter));
 
             initalizeMapView(mapViewList.get(mapViewListCounter));
 
@@ -116,6 +109,16 @@ public class DashboardController implements Initializable {
             //activitiesContainer.prefWidthProperty().bind(activitiesContainer.getScene().widthProperty().multiply(0.75));
             mapViewListCounter++;
         }
+    }
+
+    private String getActivityLocation(Activity activity) {
+        ArrayList<Waypoint> waypoints = activityLogic.getActivityTrackPoints(activity);
+        ReverseGeocoder geocoder=new ReverseGeocoder();
+        AtomicReference<String> countryName= new AtomicReference<>("");
+        geocoder.getCountry(waypoints.get(0).getLatitude(), waypoints.get(0).getLongitude()).ifPresent(country -> {
+            countryName.set(country.name());
+        });
+        return countryName.toString();
     }
 
     private static Label initalizeElevationOrPaceLabel(Activity activity, Label elevationOrPaceLabelTitle) {
@@ -147,14 +150,19 @@ public class DashboardController implements Initializable {
         });
 
     }
+
     private void afterMapIsInitialized(MapView mapView) {
-        for (Marker marker:markerList) {
+        for (Marker marker : markerList) {
             //mapView.addMarker(marker);
         }
-        for (CoordinateLine c:trackDrawingList) {
-            System.out.println(c);
-            mapView.addCoordinateLine(c);
-        }
+
+        List<Coordinate> coordinateList = trackDrawingList.get(currentActivityCounter).getCoordinateStream().toList();
+        //Get first, middle and last coordinates
+        Extent extent = Extent.forCoordinates(coordinateList.get(0), coordinateList.get(coordinateList.size() - 1),coordinateList.get(coordinateList.size()/2));
+        mapView.setExtent(extent);
+
+        mapView.addCoordinateLine(trackDrawingList.get(currentActivityCounter));
+        currentActivityCounter++;
     }
 
 

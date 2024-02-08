@@ -34,6 +34,8 @@ dependencies {
     implementation 'org.openjfx:javafx-fxml:17.0.1'
     implementation 'org.openjfx:javafx-web:17.0.1'
     implementation 'me.himanshusoni.gpxparser:gpx-parser:1.13'
+    implementation("io.github.coordinates2country:coordinates2country:1.6")
+    implementation 'uk.recurse:reverse-country-code:1.0.0'
 //    testImplementation group: 'junit', name: 'junit', version:'4.+'
 }
 

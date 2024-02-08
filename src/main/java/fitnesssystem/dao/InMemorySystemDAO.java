@@ -30,7 +30,7 @@ public class InMemorySystemDAO implements SystemDAO {
         ActivityTrack track2=new ActivityTrack(gpx2);
 
         activities.add(new Activity(new Sport("Run"), 10.45, Duration.ofHours(1).plusMinutes(30).plusSeconds(45), 15, LocalDateTime.now(), "Afternoon Run", "New PB",new Athlete("Peeter","Peets","Estonia","Tartu"),"Tartu",track));
-        activities.add(new Activity(new Sport("Bike"), 40.21, Duration.ofHours(2).plusMinutes(12).plusSeconds(30), 125, LocalDateTime.now(), "Afternoon Bike", "Awful wind today",new Athlete("Mike","John","England","London"),"London",track2));
+        activities.add(new Activity(new Sport("Run"), 12.21, Duration.ofHours(2).plusMinutes(12).plusSeconds(30), 125, LocalDateTime.now(), "Afternoon Bike", "Awful wind today",new Athlete("Mike","John","England","London"),"London",track2));
         String timeString = "01:00:00";
         LocalTime timeToBeat = LocalTime.parse(timeString);
         String timeBestString = "01:05:00";
