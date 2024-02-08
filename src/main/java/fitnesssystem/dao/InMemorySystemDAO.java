@@ -23,12 +23,14 @@ public class InMemorySystemDAO implements SystemDAO {
         List<Segment> segments = new ArrayList<Segment>();
 
         GPXParser parser = new GPXParser();
-        GPX gpx=parseExampleGPX(parser);
+        GPX gpx=parseExampleGPX(parser,"/example.gpx");
+        GPX gpx2=parseExampleGPX(parser,"/example2spain.gpx");
 
         ActivityTrack track=new ActivityTrack(gpx);
+        ActivityTrack track2=new ActivityTrack(gpx2);
 
         activities.add(new Activity(new Sport("Run"), 10.45, Duration.ofHours(1).plusMinutes(30).plusSeconds(45), 15, LocalDateTime.now(), "Afternoon Run", "New PB",new Athlete("Peeter","Peets","Estonia","Tartu"),"Tartu",track));
-        activities.add(new Activity(new Sport("Bike"), 40.21, Duration.ofHours(2).plusMinutes(12).plusSeconds(30), 125, LocalDateTime.now(), "Afternoon Bike", "Awful wind today",new Athlete("Mike","John","England","London"),"London",track));
+        activities.add(new Activity(new Sport("Bike"), 40.21, Duration.ofHours(2).plusMinutes(12).plusSeconds(30), 125, LocalDateTime.now(), "Afternoon Bike", "Awful wind today",new Athlete("Mike","John","England","London"),"London",track2));
         String timeString = "01:00:00";
         LocalTime timeToBeat = LocalTime.parse(timeString);
         String timeBestString = "01:05:00";
@@ -38,9 +40,9 @@ public class InMemorySystemDAO implements SystemDAO {
         this.segmentList=segments;
     }
 
-    private GPX parseExampleGPX(GPXParser p) {
+    private GPX parseExampleGPX(GPXParser p,String url) {
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/example.gpx");
+            InputStream inputStream = getClass().getResourceAsStream(url);
             return p.parseGPX(inputStream);
         } catch (Exception e) {
             e.printStackTrace();

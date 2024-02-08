@@ -54,9 +54,7 @@ public class ActivityLogic {
         return activitiesWithSportsFilterUsed;
     }
 
-    public ArrayList<Waypoint> getActivityTrackPoints() {
-        List<Activity> activities=dao.findActivities();
-        for (Activity activity :activities) {
+    public ArrayList<Waypoint> getActivityTrackPoints(Activity activity) {
             GPX gpx= activity.getActivityTrack().getGpx();
             HashSet<Track> tracks = gpx.getTracks();
             if (tracks == null) {
@@ -66,10 +64,8 @@ public class ActivityLogic {
             } else {
                 log.info("Routes: ");
                 for (Track track : tracks) {
-                    System.out.println(track.getTrackPoints());
                     return track.getTrackPoints();
                 }
-            }
         }
         return null;
     }
