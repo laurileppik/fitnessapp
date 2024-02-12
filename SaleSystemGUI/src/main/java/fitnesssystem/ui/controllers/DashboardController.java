@@ -86,7 +86,7 @@ public class DashboardController implements Initializable {
             Label distanceTitleLabel = new Label("Distance ");
             Label timeTitleLabel = new Label("Time ");
             Label elevationOrPaceLabelTitle = new Label();
-            Label distanceLabel = new Label(activity.getDistance() + " km");
+            Label distanceLabel = new Label(activityLogic.getRealDistance(activity) + " km");
             Label timeLabel = new Label(activityLogic.getRealDuration(activity));
             Label emptyRow = new Label();
             Label elevationOrPaceLabel = initalizeElevationOrPaceLabel(activity, elevationOrPaceLabelTitle);

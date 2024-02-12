@@ -107,8 +107,8 @@ public class ActivityLogic {
             log.info("Routes list is empty.");
         } else {
             for (Track track : tracks) {
-                ArrayList<Waypoint> trackPoints=track.getTrackPoints();
-                long totalSeconds=(track.getTrackPoints().get(trackPoints.size()-1).getTime().getTime()-track.getTrackPoints().get(0).getTime().getTime())/1000;
+                ArrayList<Waypoint> trackPoints = track.getTrackPoints();
+                long totalSeconds = (track.getTrackPoints().get(trackPoints.size() - 1).getTime().getTime() - track.getTrackPoints().get(0).getTime().getTime()) / 1000;
                 long hours = totalSeconds / 3600;
                 long minutes = (totalSeconds % 3600) / 60;
                 long seconds = totalSeconds % 60;
@@ -118,8 +118,7 @@ public class ActivityLogic {
                     activity.setDuration(Duration.ofSeconds(totalSeconds));
                     //activity.setDuration(Duration.parse(formattedTime));
                     return formattedTime.substring(1);
-                }
-                else  {
+                } else {
                     activity.setDuration(Duration.ofSeconds(totalSeconds));
                     return formattedTime;
                 }
@@ -127,6 +126,7 @@ public class ActivityLogic {
         }
         return null;
     }
+
     public String getRealTitle(Activity activity) {
         GPX gpx = activity.getActivityTrack().getGpx();
         HashSet<Track> tracks = gpx.getTracks();
@@ -141,6 +141,52 @@ public class ActivityLogic {
             }
         }
         return null;
+    }
+
+    public String getRealDistance(Activity activity) {
+        GPX gpx = activity.getActivityTrack().getGpx();
+        HashSet<Track> tracks = gpx.getTracks();
+        if (tracks == null) {
+            log.info("No routes found");
+        } else if (tracks.isEmpty()) {
+            log.info("Routes list is empty.");
+        } else {
+            double totalDistance = 0;
+            String returnableDistance = "";
+            for (Track track : tracks) {
+                ArrayList<Waypoint> waypoints = track.getTrackPoints();
+                for (int i = 0; i < waypoints.size(); i++) {
+                    if (i < waypoints.size() - 1)
+                        totalDistance += haversine(waypoints.get(i).getLatitude(), waypoints.get(i).getLongitude(), waypoints.get(i + 1).getLatitude(), waypoints.get(i + 1).getLongitude());
+                    returnableDistance=String.format("%.2f", totalDistance);
+                }
+
+                activity.setDistance(Double.parseDouble(returnableDistance));
+                return returnableDistance;
+            }
+        }
+        return null;
+    }
+
+    //https://www.geeksforgeeks.org/haversine-formula-to-find-distance-between-two-points-on-a-sphere/
+    static double haversine(double lat1, double lon1,
+                            double lat2, double lon2) {
+        // distance between latitudes and longitudes
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        // convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        // apply formulae
+        double a = Math.pow(Math.sin(dLat / 2), 2) +
+                Math.pow(Math.sin(dLon / 2), 2) *
+                        Math.cos(lat1) *
+                        Math.cos(lat2);
+        double rad = 6371;
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return rad * c;
     }
 }
 

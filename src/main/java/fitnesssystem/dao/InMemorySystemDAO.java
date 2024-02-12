@@ -51,6 +51,21 @@ public class InMemorySystemDAO implements SystemDAO {
     }
 
     @Override
+    public void beginTransaction() {
+
+    }
+
+    @Override
+    public void rollbackTransaction() {
+
+    }
+
+    @Override
+    public void commitTransaction() {
+
+    }
+
+    @Override
     public List<Activity> findActivities() {
         return activityList;
     }
